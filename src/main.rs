@@ -2,12 +2,12 @@
 extern crate rocket;
 
 use rocket::http::ContentType;
+use rocket::response;
 use rocket::State;
 use scraper::{Html, Selector};
 use std::collections::HashMap;
 use std::fs;
 use std::sync::Mutex;
-use rocket::response;
 
 // type UserData = Mutex<HashMap<String, (String, Vec<(String, String)>)>>;
 
@@ -36,8 +36,6 @@ impl From<usize> for ContentLevel {
     }
 }
 
-
-
 #[derive(Debug, Clone)]
 struct EndpointContent {
     level: ContentLevel,
@@ -49,9 +47,12 @@ struct User {
     endpoints: HashMap<String, Vec<EndpointContent>>,
 }
 
-
 #[get("/<userid>/<endpoint>")]
-fn api_endpoint(userid: String, endpoint: String, users: &State<UserData>) -> (ContentType, String) {
+fn api_endpoint(
+    userid: String,
+    endpoint: String,
+    users: &State<UserData>,
+) -> (ContentType, String) {
     let users = users.lock().unwrap();
     let Some(user) = users.get(&userid) else {
         return (ContentType::HTML, "This user does not exist or the endpoint is not available.".to_string());
@@ -76,17 +77,16 @@ fn api_endpoint(userid: String, endpoint: String, users: &State<UserData>) -> (C
         .collect();
 
     if accessible_content.is_empty() {
-        return (ContentType::HTML, "Not Found or insufficient access level.".to_string());
+        return (
+            ContentType::HTML,
+            "Not Found or insufficient access level.".to_string(),
+        );
     }
 
     eprintln!("{:?}", accessible_content);
     let content = accessible_content.join("\n");
     (ContentType::HTML, content)
 }
-
-
-
-
 
 #[derive(Debug)]
 struct HtmlConfig {
@@ -95,36 +95,51 @@ struct HtmlConfig {
     users: HashMap<String, User>,
 }
 
-// 
-
+//
 
 fn parse_index_html(html: &str) -> HtmlConfig {
     let document = Html::parse_document(html);
 
-    let address = document.select(&Selector::parse(r#"meta[name="address"]"#).unwrap())
+    let address = document
+        .select(&Selector::parse(r#"meta[name="address"]"#).unwrap())
         .next()
         .and_then(|e| e.value().attr("content"))
         .unwrap_or("127.0.0.1")
         .to_string();
 
-    let port = document.select(&Selector::parse(r#"meta[name="port"]"#).unwrap())
+    let port = document
+        .select(&Selector::parse(r#"meta[name="port"]"#).unwrap())
         .next()
         .and_then(|e| e.value().attr("content"))
         .and_then(|p| p.parse().ok())
         .unwrap_or(8000);
 
     let mut users: HashMap<String, User> = HashMap::new();
-    for (i, selector) in (1..=6).map(|i| Selector::parse(&format!("meta[name=\"user\"][level=\"h{}\"]", i)).unwrap()).enumerate() {
+    for (i, selector) in (1..=6)
+        .map(|i| Selector::parse(&format!("meta[name=\"user\"][level=\"h{}\"]", i)).unwrap())
+        .enumerate()
+    {
         for element in document.select(&selector) {
             let userid = element.value().attr("value").unwrap().to_string();
             let level = ContentLevel::from(i + 1);
-            users.insert(userid, User { level, endpoints: HashMap::new() });
+            users.insert(
+                userid,
+                User {
+                    level,
+                    endpoints: HashMap::new(),
+                },
+            );
         }
     }
 
     let a_selector = Selector::parse("a[href]").unwrap();
     let h_selectors: Vec<(ContentLevel, Selector)> = (1..=6)
-        .map(|i| (ContentLevel::from(i), Selector::parse(&format!("H{}", i)).unwrap()))
+        .map(|i| {
+            (
+                ContentLevel::from(i),
+                Selector::parse(&format!("H{}", i)).unwrap(),
+            )
+        })
         .collect();
 
     // for a_element in document.select(&a_selector) {
@@ -146,17 +161,20 @@ fn parse_index_html(html: &str) -> HtmlConfig {
     // }
     for a_element in document.select(&a_selector) {
         let href = a_element.value().attr("href").unwrap();
-    
+
         for (level, h_selector) in h_selectors.iter() {
             if let Some(h_element) = a_element.select(h_selector).next() {
                 let endpoint_content = EndpointContent {
                     level: level.clone(),
                     content: h_element.inner_html(),
                 };
-    
+
                 for user in users.values_mut() {
                     if user.level <= level.clone() {
-                        user.endpoints.entry(href.to_string()).or_insert_with(Vec::new).push(endpoint_content.clone());
+                        user.endpoints
+                            .entry(href.to_string())
+                            .or_insert_with(Vec::new)
+                            .push(endpoint_content.clone());
                     }
                 }
             }
@@ -171,7 +189,6 @@ fn parse_index_html(html: &str) -> HtmlConfig {
     }
 }
 
-
 #[rocket::launch]
 fn rocket() -> _ {
     let index_html = fs::read_to_string("index.html").expect("Unable to read index.html");
@@ -185,4 +202,3 @@ fn rocket() -> _ {
         .manage(Mutex::new(config.users))
         .mount("/", routes![api_endpoint])
 }
-
