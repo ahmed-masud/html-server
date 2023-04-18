@@ -2,7 +2,6 @@
 extern crate rocket;
 
 use rocket::http::ContentType;
-use rocket::response;
 use rocket::State;
 use scraper::{Html, Selector};
 use std::collections::HashMap;
