@@ -1,5 +1,8 @@
 # HTML Server - Redefining Backend Development 🧐
 
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/ahmed-masud/html-server/on-update.yml?style=for-the-badge)
+
+
 
 Welcome to the HTML Server, a groundbreaking project that challenges the status quo of backend development. It's said that the pioneers of our time are the ones who dare to dream. Inspired by a tweet from ThePrimagen, we bring forth this innovative creation that pushes the boundaries of programming paradigms: "Until your backend is written in HTML, you are just a script kiddie."
 
