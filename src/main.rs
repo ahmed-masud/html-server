@@ -141,23 +141,6 @@ fn parse_index_html(html: &str) -> HtmlConfig {
         })
         .collect();
 
-    // for a_element in document.select(&a_selector) {
-    //     let href = a_element.value().attr("href").unwrap();
-    //     let mut endpoint_contents = vec![];
-
-    //     for (level, h_selector) in h_selectors.iter() {
-    //         if let Some(h_element) = a_element.select(h_selector).next() {
-    //             endpoint_contents.push(EndpointContent {
-    //                 level: level.clone(),
-    //                 content: h_element.inner_html(),
-    //             });
-    //         }
-    //     }
-
-    //     for user in users.values_mut() {
-    //         user.endpoints.insert(href.to_string(), endpoint_contents.clone());
-    //     }
-    // }
     for a_element in document.select(&a_selector) {
         let href = a_element.value().attr("href").unwrap();
 
