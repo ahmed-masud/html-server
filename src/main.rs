@@ -61,13 +61,6 @@ fn api_endpoint(
         return (ContentType::HTML, "Endpoint not found.".to_string());
     };
 
-    eprintln!("{:?}", endpoint_contents);
-
-    // let Some(content) = endpoint_contents
-    //     .iter()
-    //     .find(|content| &content.level == &user.level) else {
-    //         return (ContentType::HTML, "Not Found or insufficient access level.".to_string());
-    // };
     let accessible_content: Vec<String> = endpoint_contents
         .iter()
         // yes THIS is backwards
@@ -82,7 +75,6 @@ fn api_endpoint(
         );
     }
 
-    eprintln!("{:?}", accessible_content);
     let content = accessible_content.join("\n");
     (ContentType::HTML, content)
 }
@@ -163,7 +155,6 @@ fn parse_index_html(html: &str) -> HtmlConfig {
         }
     }
 
-    eprintln!("{:?}", users);
     HtmlConfig {
         address,
         port,
