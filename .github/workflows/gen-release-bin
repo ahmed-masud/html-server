@@ -1,15 +1,1 @@
-name: Rust Release
-  # You may pin to the exact commit or the version.
-  # uses: manoadamro/rust-release@028b5d008bac5437257ec3ec905b12aed11e766a
-  uses: manoadamro/rust-release@v1
-  with:
-    # Github Repo Owner
-    owner: 
-    # Github Repo
-    repo: 
-    # Github Token
-    token: 
-    # Cargo.toml path
-    cargo: # default is Cargo.toml
-    # do not actually create release
-    dry_run: # default is false
+
