@@ -1,6 +1,5 @@
 # HTML Server - Redefining Backend Development 🧐
 
-[![Ahmed's GitHub stats](https://github-readme-stats.vercel.app/api?username=ahmed-masud)](https://github.com/ahmed-masud/github-readme-stats)
 
 Welcome to the HTML Server, a groundbreaking project that challenges the status quo of backend development. It's said that the pioneers of our time are the ones who dare to dream. Inspired by a tweet from ThePrimagen, we bring forth this innovative creation that pushes the boundaries of programming paradigms: "Until your backend is written in HTML, you are just a script kiddie."
 
