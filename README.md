@@ -1,5 +1,7 @@
 # HTML Server - Redefining Backend Development 🧐
 
+[![Ahmed's GitHub stats](https://github-readme-stats.vercel.app/api?username=ahmed-masud)](https://github.com/ahmed-masud/github-readme-stats)
+
 Welcome to the HTML Server, a groundbreaking project that challenges the status quo of backend development. It's said that the pioneers of our time are the ones who dare to dream. Inspired by a tweet from ThePrimagen, we bring forth this innovative creation that pushes the boundaries of programming paradigms: "Until your backend is written in HTML, you are just a script kiddie."
 
 HTML Server aims to prove its worth by redefining backend development with its state-of-the-art design. This project is a testament to our unwavering commitment to simplicity and the relentless pursuit of progress. Built with the steadfast Rust language and the formidable Rocket web framework, the HTML Server meticulously parses an index.html file to create a robust, highly-efficient backend server.
